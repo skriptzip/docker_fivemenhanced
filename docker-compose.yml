@@ -1,0 +1,41 @@
+services:
+  fivem:
+    build: .
+    container_name: fivem-server
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:30120:30120/tcp"
+      - "127.0.0.1:30120:30120/udp"
+    volumes:
+      - ./server.cfg:/server/server.cfg:ro
+      - ./resources:/server/resources
+      - fivem-data:/server/data
+    environment:
+      - CFG_FILE=server.cfg
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    cap_add:
+      - SETGID
+      - SETUID
+    read_only: false
+    tmpfs:
+      - /tmp:noexec,nosuid,size=64M
+      - /server/.fxs_home:size=16M
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 2G
+        reservations:
+          cpus: '1.0'
+          memory: 1G
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+volumes:
+  fivem-data:
