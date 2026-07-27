@@ -25,7 +25,7 @@ RUN mkdir -p /server/resources /server/data \
 LABEL org.opencontainers.image.title="FiveM Server (GTA Enhanced)" \
       org.opencontainers.image.description="FiveM dedicated server for GTA Enhanced" \
       org.opencontainers.image.version="${FIVEM_NUM}" \
-      org.opencontainers.image.source="https://github.com/OWNER/docker_fivemenhanced"
+      org.opencontainers.image.source="https://github.com/skriptzip/docker_fivemenhanced"
 
 USER fivem
 

@@ -55,7 +55,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ghcr.io/${{ github.repository }}
+          images: ghcr.io/skriptzip/fivem-enhanced  
           tags: |
             type=raw,value=latest
             type=raw,value=${{ needs.check-update.outputs.build }}
