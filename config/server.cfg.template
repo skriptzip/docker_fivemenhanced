@@ -1,0 +1,47 @@
+endpoint_add_tcp "0.0.0.0:30120"
+endpoint_add_udp "0.0.0.0:30120"
+
+start mapmanager
+start chat
+start spawnmanager
+start sessionmanager
+start fivem
+start hardcap
+start rconlog
+start scoreboard
+start playernames
+
+sv_hostname "${SERVER_NAME}"
+sets sv_projectName "${SERVER_NAME}"
+sets sv_projectDesc "${SERVER_DESC}"
+sets tags "${SERVER_TAGS}"
+sets locale "${LOCALE}"
+
+sv_maxclients ${MAX_CLIENTS}
+rcon_password "${RCON_PASSWORD}"
+
+sv_scriptHookAllowed 0
+sv_endpointprivacy true
+
+sv_whitelist ${WHITELIST}
+sv_pureLevel ${PURE_LEVEL}
+
+sv_logpath "${LOG_PATH}"
+sv_logbans ${LOG_BANS}
+sv_logheartbeats ${LOG_HEARTBEATS}
+
+set steam_webApiKey "${STEAM_API_KEY}"
+
+# Game Build (GTA Enhanced)
+# sv_enforceGameBuild ${GAME_BUILD}
+
+# MySQL (optional)
+# set mysql_connection_string "${MYSQL_CONNECTION}"
+
+# Add system admins
+add_ace group.admin command allow
+add_ace group.admin command.quit deny
+# add_principal identifier.steam:110000112345678 group.admin
+
+# Custom resources (add below)
+# ensure myresource

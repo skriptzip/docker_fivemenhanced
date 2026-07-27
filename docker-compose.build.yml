@@ -3,15 +3,26 @@ services:
     build: .
     container_name: fivem-server
     restart: unless-stopped
+    stop_grace_period: 46s
     ports:
       - "127.0.0.1:30120:30120/tcp"
       - "127.0.0.1:30120:30120/udp"
     volumes:
-      - ./server.cfg:/server/server.cfg:ro
-      - ./resources:/server/resources
+      - ./config:/config
       - fivem-data:/server/data
     environment:
-      - CFG_FILE=server.cfg
+      - LICENSE_KEY=${LICENSE_KEY}
+      - SERVER_NAME=${SERVER_NAME:-FiveM Enhanced Server}
+      - SERVER_DESC=${SERVER_DESC:-A FiveM Enhanced Server running in Docker}
+      - SERVER_TAGS=${SERVER_TAGS:-default}
+      - MAX_CLIENTS=${MAX_CLIENTS:-32}
+      - LOCALE=${LOCALE:-en-US}
+      - RCON_PASSWORD=${RCON_PASSWORD:-changeme}
+      - STEAM_API_KEY=${STEAM_API_KEY:-none}
+      - WHITELIST=${WHITELIST:-0}
+      - PURE_LEVEL=${PURE_LEVEL:-0}
+      - LOG_BANS=${LOG_BANS:-1}
+      - LOG_HEARTBEATS=${LOG_HEARTBEATS:-1}
     security_opt:
       - no-new-privileges:true
     cap_drop:
