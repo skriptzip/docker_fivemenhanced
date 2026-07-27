@@ -1,6 +1,10 @@
 .git
 .gitignore
+.github
 *.md
+*.tar.xz
 docker-compose.yml
+update.sh
 .env
 data/
+resources/
