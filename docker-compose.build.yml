@@ -1,6 +1,6 @@
 services:
   fivem:
-    image: ghcr.io/skriptzip/fivem-enhanced:latest
+    build: .
     container_name: fivem-server
     restart: unless-stopped
     ports:
