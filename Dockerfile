@@ -2,7 +2,7 @@ FROM alpine:3.20
 
 ARG FIVEM_NUM=0
 ARG FIVEM_URL=https://downloads.cfx-services.net/prod/Linux/cfx-server_linux_x64.tar.xz
-ARG FIVEM_SHA256=0
+ARG FIVEM_SHA256=
 
 RUN apk add --no-cache bash curl xz
 
@@ -11,7 +11,7 @@ RUN addgroup -S fivem && adduser -S -G fivem -h /server fivem
 WORKDIR /server
 
 RUN curl -fsSL --retry 3 --retry-delay 2 "$FIVEM_URL" -o cfx-server.tar.xz \
-    && echo "$FIVEM_SHA256  cfx-server.tar.xz" | sha256sum -c - \
+    && if [ -n "$FIVEM_SHA256" ]; then echo "$FIVEM_SHA256  cfx-server.tar.xz" | sha256sum -c -; fi \
     && tar -xf cfx-server.tar.xz \
     && rm cfx-server.tar.xz \
     && chmod +x run.sh \
