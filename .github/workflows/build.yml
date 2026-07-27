@@ -36,7 +36,6 @@ jobs:
 
   build-and-push:
     needs: check-update
-    if: needs.check-update.outputs.changed == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -53,6 +52,11 @@ jobs:
       - name: Docker meta
         id: meta
         uses: docker/metadata-action@v6
+        with:
+          images: ghcr.io/${{ github.repository }}
+          tags: |
+            type=raw,value=latest
+            type=raw,value=${{ needs.check-update.outputs.build }}
 
       - name: Build and push
         uses: docker/build-push-action@v6
