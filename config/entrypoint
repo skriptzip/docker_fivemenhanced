@@ -4,26 +4,19 @@ if [ -n "$DEBUG" ]; then
     set -x
 fi
 
-if ! find . -mindepth 1 | read -r; then
-    >&2 echo "Creating default configs..."
-    cp -r /opt/cfx-server-data/* /config
-    >&2 echo "Default configs created"
+mkdir -p /fivem-data/resources /fivem-data/data
+
+TEMPLATE_FILE="/fivem-data/server.cfg.template"
+if [ ! -f "$TEMPLATE_FILE" ]; then
+    >&2 echo "No server.cfg.template found in /fivem-data, copying default from image..."
+    cp /opt/cfx-server-data/server.cfg.template "$TEMPLATE_FILE"
 fi
 
-TEMPLATE_FILE=""
-if [ -f /config/server.cfg.template ]; then
-    TEMPLATE_FILE="/config/server.cfg.template"
-    >&2 echo "Using project template: /config/server.cfg.template"
-elif [ -f /opt/cfx-server-data/server.cfg.template ]; then
-    TEMPLATE_FILE="/opt/cfx-server-data/server.cfg.template"
-    >&2 echo "Using image template: /opt/cfx-server-data/server.cfg.template"
-else
-    >&2 echo "ERROR: No server.cfg.template found!"
-    exit 1
-fi
+# Rendered purely inside the container (tmpfs) - never written back to the /fivem-data mount.
+RENDERED_CFG="/server/.fxs_home/server.cfg"
 
-if [ -n "$TEMPLATE_FILE" ] && [ -f "$TEMPLATE_FILE" ]; then
-    >&2 echo "Generating server.cfg from template..."
+if [ -f "$TEMPLATE_FILE" ]; then
+    >&2 echo "Generating server.cfg from template (container-only, not exposed via mount)..."
     >&2 echo ""
 
     >&2 echo "Found variables in template:"
@@ -40,13 +33,13 @@ if [ -n "$TEMPLATE_FILE" ] && [ -f "$TEMPLATE_FILE" ]; then
 
     >&2 echo ""
     >&2 echo "Replacing variables in server.cfg..."
-    cp "$TEMPLATE_FILE" /config/server.cfg
+    cp "$TEMPLATE_FILE" "$RENDERED_CFG"
 
     for VAR_NAME in $VARS; do
         VAR_VALUE=$(printenv "$VAR_NAME")
         if [ -n "$VAR_VALUE" ]; then
             ESCAPED_VALUE=$(printf '%s\n' "$VAR_VALUE" | sed -e 's/[#\&/|]/\\&/g')
-            sed -i "s#\${$VAR_NAME}#$ESCAPED_VALUE#g" /config/server.cfg
+            sed -i "s#\${$VAR_NAME}#$ESCAPED_VALUE#g" "$RENDERED_CFG"
             >&2 echo "  Replaced \${$VAR_NAME}"
         fi
     done
@@ -56,7 +49,7 @@ fi
 
 CONFIG_ARGS=""
 if [ -z "${NO_DEFAULT_CONFIG}" ]; then
-    CONFIG_ARGS="$CONFIG_ARGS +exec /config/server.cfg"
+    CONFIG_ARGS="$CONFIG_ARGS +exec $RENDERED_CFG"
 fi
 
 if [ -z "${NO_LICENSE_KEY}${NO_LICENCE_KEY}" ]; then

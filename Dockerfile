@@ -17,13 +17,15 @@ RUN curl -fsSL --retry 3 --retry-delay 2 "$FIVEM_URL" -o cfx-server.tar.xz \
     && chmod +x run.sh \
     && chown -R fivem:fivem /server
 
-COPY --chown=fivem:fivem config/server.cfg.template /opt/cfx-server-data/
+COPY --chown=fivem:fivem fivem-data/server.cfg.template /opt/cfx-server-data/
 COPY --chown=fivem:fivem config/entrypoint /usr/bin/entrypoint
 RUN chmod +x /usr/bin/entrypoint \
     && sed -i 's/\r$//' /usr/bin/entrypoint
 
-RUN mkdir -p /server/resources /server/data \
-    && chown -R fivem:fivem /server/resources /server/data
+RUN mkdir -p /fivem-data \
+    && ln -s /fivem-data/resources /server/resources \
+    && ln -s /fivem-data/data /server/data \
+    && chown -R fivem:fivem /fivem-data
 
 LABEL org.opencontainers.image.title="FiveM Server (GTA Enhanced)" \
       org.opencontainers.image.description="FiveM dedicated server for GTA Enhanced" \

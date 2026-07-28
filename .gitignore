@@ -3,5 +3,7 @@
 *.tar.bz2
 *.zip
 .env
-data/
-resources/
+fivem-data/resources/*
+!fivem-data/resources/.gitkeep
+fivem-data/data/*
+!fivem-data/data/.gitkeep
