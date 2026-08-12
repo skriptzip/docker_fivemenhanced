@@ -1,8 +1,8 @@
 FROM alpine:3.20
 
-ARG FIVEM_NUM=115
-ARG FIVEM_URL=https://downloads.cfx-services.net/prod/019ff139-e861-7589-a912-577a01ad8ac1/cfx-server_linux_x64.tar.xz
-ARG FIVEM_SHA256=ecc3662dd7cf3fb1fc243909df58908e8447fcebffbfa2943076d4c4b10f7c22
+ARG FIVEM_NUM=118
+ARG FIVEM_URL=https://downloads.cfx-services.net/prod/019ff6a2-f58a-7ad1-8caa-bb9af3fd458a/cfx-server_linux_x64.tar.xz
+ARG FIVEM_SHA256=1d73c08c02dc3547892a31100771ea29b554a04a85d514e854d93c1363da65bb
 
 RUN apk add --no-cache bash curl xz
 
