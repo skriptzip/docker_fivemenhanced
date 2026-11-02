@@ -47,6 +47,28 @@ if [ -f "$TEMPLATE_FILE" ]; then
     >&2 echo "✓ server.cfg generated successfully"
 fi
 
+# Bundled system resources are only kept when enabled. txAdmin is on when
+# ENABLE_TXADMIN=1 or when running in txAdmin mode (NO_DEFAULT_CONFIG set).
+# chat is only kept when ENABLE_CHAT=1.
+SYSTEM_RESOURCES="/server/alpine/opt/cfx-server/system_resources"
+
+if [ "${ENABLE_TXADMIN}" != "1" ] && [ -z "${NO_DEFAULT_CONFIG}" ]; then
+    if [ -d "$SYSTEM_RESOURCES/txadmin" ]; then
+        >&2 echo "txAdmin disabled, removing bundled txadmin resource"
+        rm -rf "$SYSTEM_RESOURCES/txadmin"
+    fi
+fi
+
+if [ "${ENABLE_CHAT}" != "1" ]; then
+    if [ -d "$SYSTEM_RESOURCES/chat" ]; then
+        >&2 echo "chat disabled, removing bundled chat resource"
+        rm -rf "$SYSTEM_RESOURCES/chat"
+    fi
+    if [ -f "$RENDERED_CFG" ]; then
+        sed -i '/^[[:space:]]*\(start\|ensure\)[[:space:]]\+chat[[:space:]]*$/d' "$RENDERED_CFG"
+    fi
+fi
+
 CONFIG_ARGS=""
 if [ -z "${NO_DEFAULT_CONFIG}" ]; then
     CONFIG_ARGS="$CONFIG_ARGS +exec $RENDERED_CFG"

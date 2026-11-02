@@ -22,6 +22,8 @@ services:
       - PURE_LEVEL=${PURE_LEVEL:-0}
       - LOG_BANS=${LOG_BANS:-1}
       - LOG_HEARTBEATS=${LOG_HEARTBEATS:-1}
+      - ENABLE_TXADMIN=${ENABLE_TXADMIN:-0}
+      - ENABLE_CHAT=${ENABLE_CHAT:-0}
     security_opt:
       - no-new-privileges:true
     cap_drop:
