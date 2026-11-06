@@ -30,6 +30,7 @@ url=${artifact#*	}
 
 case "$url" in
   https://downloads.cfx-services.net/prod/*/cfx-server_linux_x64.tar.xz) ;;
+  https://cfx-downloads.akamaized.net/prod/*/cfx-server_linux_x64.tar.xz) ;;
   *) echo "Refusing unexpected artifact URL: $url" >&2; exit 1 ;;
 esac
 
