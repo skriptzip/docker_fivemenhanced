@@ -6,7 +6,7 @@ dockerfile=${DOCKERFILE:-Dockerfile}
 tmpdir=$(mktemp -d)
 trap 'rm -rf "$tmpdir"' EXIT HUP INT TERM
 
-curl -fsSL --retry 3 --retry-delay 2 "$download_page" -o "$tmpdir/page.html"
+curl -fsSL --retry 6 --retry-delay 10 --retry-all-errors -A "Mozilla/5.0 (compatible; fivem-update-check)" "$download_page" -o "$tmpdir/page.html"
 
 sed -n 's#.*<script id="__NEXT_DATA__" type="application/json">\(.*\)</script>.*#\1#p' \
   "$tmpdir/page.html" > "$tmpdir/next-data.json"
@@ -34,7 +34,7 @@ case "$url" in
   *) echo "Refusing unexpected artifact URL: $url" >&2; exit 1 ;;
 esac
 
-curl -fsSL --retry 3 --retry-delay 2 "$url" -o "$tmpdir/cfx-server.tar.xz"
+curl -fsSL --retry 6 --retry-delay 10 --retry-all-errors -A "Mozilla/5.0 (compatible; fivem-update-check)" "$url" -o "$tmpdir/cfx-server.tar.xz"
 sha256=$(sha256sum "$tmpdir/cfx-server.tar.xz" | awk '{print $1}')
 xz -t "$tmpdir/cfx-server.tar.xz"
 
