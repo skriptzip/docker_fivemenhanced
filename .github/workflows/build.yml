@@ -11,12 +11,12 @@ permissions:
 
 jobs:
   check-update:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     outputs:
       changed: ${{ steps.update.outputs.changed }}
       build: ${{ steps.update.outputs.build }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Install dependencies
         run: sudo apt-get update && sudo apt-get install -y jq
@@ -36,9 +36,9 @@ jobs:
 
   build-and-push:
     needs: check-update
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           ref: main
           fetch-depth: 0
