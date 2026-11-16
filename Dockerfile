@@ -37,7 +37,7 @@ USER fivem
 EXPOSE 30120/tcp
 EXPOSE 30120/udp
 
-HEALTHCHECK --interval=30s --timeout=5s --start-period=30s --retries=3 \
-    CMD pgrep -x FXServer > /dev/null || exit 1
+HEALTHCHECK --interval=30s --timeout=5s --start-period=2m --retries=3 \
+    CMD wget -qO- http://127.0.0.1:30120/info.json > /dev/null || exit 1
 
 ENTRYPOINT ["/usr/bin/entrypoint"]
